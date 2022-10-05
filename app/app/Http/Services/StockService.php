@@ -60,6 +60,12 @@ class StockService
         return $content;
     }
 
+    public function getFewStocksInfo($stock_id)
+    {
+        $stockInfo = TwStockInfo::where('stock_id', '=', $stock_id)->firstOrFail();
+        return $stockInfo;
+    }
+
     public function saveFewStocksDataToCsv($stock_id)
     {
         $data = $this->getFewStocksData($stock_id);

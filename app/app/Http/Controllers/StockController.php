@@ -57,7 +57,7 @@ class StockController extends Controller
      */
     public function show($stock_id)
     {
-        $stockInfo = $this->stockservice->getFewStocksName($stock_id);
+        $stockInfo = $this->stockservice->getFewStocksInfo($stock_id);
         return view('stock.show', ['stockInfo' => $stockInfo]);
     }
 
