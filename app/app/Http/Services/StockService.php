@@ -59,4 +59,30 @@ class StockService
         
         return $content;
     }
+
+    public function saveFewStocksDataToCsv($stock_id)
+    {
+        $data = $this->getFewStocksData($stock_id);
+        $data = $data['data'];
+
+        if (empty($data)) return;
+
+        $path = public_path('/docs/stock/');
+        $fileName = $stock_id . '.csv';
+        
+        $file = fopen($path . $fileName, 'w');
+
+        $columns = ['date', 'stock_id', 'Trading_Volume', 'Trading_money', 'open', 'max', 'min', 'close', 'spread', 'Trading_turnover'];
+        fputcsv($file, $columns);
+
+        foreach ($data as $key => $value) {
+            $info = [];
+            foreach ($value as $k => $v) {
+                array_push($info, $v);
+            }
+            fputcsv($file, $info);
+        }
+        
+        fclose($file);
+    }
 }
