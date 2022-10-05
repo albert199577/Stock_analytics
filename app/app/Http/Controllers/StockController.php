@@ -24,7 +24,7 @@ class StockController extends Controller
     
     public function index()
     {
-        $this->stockservice->getOriginalData();
+        $this->stockservice->getStockOverview();
         return view('stock.index');
     }
 
@@ -57,8 +57,8 @@ class StockController extends Controller
      */
     public function show($stock_id)
     {
-        $data = $this->stockservice->getIndividualStocksData($stock_id);
-        return view('stock.show', ['data' => $data]);
+        $stockInfo = $this->stockservice->getFewStocksName($stock_id);
+        return view('stock.show', ['stockInfo' => $stockInfo]);
     }
 
     /**
