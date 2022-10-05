@@ -12,4 +12,8 @@
 		<div class="col">{{ $stockInfo['industry_category'] }}</div>
 	</div>
 </div>
+
+<x-techan>
+
+</x-techan>
 @endsection
