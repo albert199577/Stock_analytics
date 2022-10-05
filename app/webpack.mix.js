@@ -10,10 +10,10 @@ const mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
-mix.copy('node_modules/chart.js/dist/chart.js', 'public/chart.js/chart.js');
 
 mix.js('resources/js/app.js', 'public/js')
-    .postCss('resources/css/app.css', 'public/css', [
-        //
-    ]);
+    .sass('resources/sass/app.scss', 'public/css')
+
+if (mix.inProduction()) mix.version();
+
 
