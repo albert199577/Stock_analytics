@@ -91,4 +91,17 @@ class StockService
         
         fclose($file);
     }
+    
+    public function getStockOverviewFromSQL(bool $all = true,int $skip = 0, int $take = 100)
+    {
+        $stocks = $all 
+                ? TwStockInfo::all()
+                : TwStockInfo::all()->skip($skip)->take($take);
+        $info = [];
+        
+        foreach ($stocks as $key => $stock) {
+            $info[] = $stock->getAttributes();
+        }
+        return $info;
+    }
 }
