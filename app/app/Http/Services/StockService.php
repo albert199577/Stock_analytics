@@ -104,4 +104,40 @@ class StockService
         }
         return $info;
     }
+
+    public function getFewStockDataFromCsv($stock_id)
+    {
+        $stock_id = strval($stock_id);
+        $path = public_path('/docs/stock/');
+        $data = [];
+        $row = [];
+
+        // csv to array    
+        $fileName = $stock_id . '.csv';
+        if (file_exists($path . $fileName)) {
+            $file = fopen($path . $fileName, 'r');
+        } else {
+            return;
+        }
+        $row = fgetcsv($file);
+        while(! feof($file)) {
+            $data[] = fgetcsv($file);
+        }
+        fclose($file);
+
+        // delete last empty array
+        $lastValue = (count($data) - 1);
+        unset($data[$lastValue]);
+
+        // change data row
+        foreach ($data as $key => $value) {
+            foreach ($row as $k => $v) {
+                $value[$v] = $value[$k];
+                unset($value[$k]);
+
+            }
+            $data[$key] = $value;
+        }
+        return $data;
+    }
 }
