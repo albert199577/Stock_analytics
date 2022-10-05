@@ -1,8 +1,8 @@
 <?php
 namespace App\Http\Services;
 
+use App\Models\TwStockInfo;
 use GuzzleHttp\Client;
-
 
 class StockService
 {
@@ -15,41 +15,48 @@ class StockService
         $this->stockApiUrl = 'https://api.finmindtrade.com/api/v4/data?';
     }
 
-    public function getOriginalData()
+    public function getStockOverview()
     {
-        $path = "{$this->stockApiUrl}dataset=TaiwanStockInfo";
+        $query = [
+            'dataset' => 'TaiwanStockInfo',
+            'token' => env('FINNIND_API_TOKEN')
+        ];
+        $path = $this->stockApiUrl . http_build_query($query);
         $content = $this->client->get($path)->getBody()->getContents();
-
-        // print_r(gettype($content));
         $content = json_decode($content, true);
-        // print_r(gettype($content));
+
         foreach ($content['data'] as $key => $value) {
             echo "<pre>";
             print_r($value);
             echo "</pre>";
+            if (strlen($value['stock_id']) != 4 || ($value['date']) == 'None' || $value['type'] == 'tpex') continue;
+            $data = [
+                'stock_name' => $value['stock_name'],
+                'stock_id' => $value['stock_id'],
+                'date' => $value['date'],
+                'industry_category' => $value['industry_category'],
+            ];
+            TwStockInfo::upsert($data, ['stock_name', 'stock_id', 'date', 'industry_category'], ['stock_id']);
+
+            // TwStockInfo::where('stock_id', $value['stock_id'])->firstOrFail()->update($data);
         }
-        // $content = $content['data'];
-        // print_r($content['data']);
-        
     }
 
-    public function getIndividualStocksData($stock_id)
+    public function getFewStocksData($stock_id)
     {
-        $date = strtotime('-2 month');
+        $date = strtotime('-10 month');
         $query = [
             'dataset' => 'TaiwanStockPrice',
             'data_id' => $stock_id,
             'start_date' => date('Y-m-d', $date),
             'end_date' => date('Y-m-d'),
+            'token' => env('FINNIND_API_TOKEN')
         ];
         $path = $this->stockApiUrl . http_build_query($query);
-        print_r($path);
+        
         $content = $this->client->get($path)->getBody()->getContents();
         $content = json_decode($content, true);
         
-        echo "<pre>";
-        print_r($content);
-        echo "</pre>";
-        return $content['data'];
+        return $content;
     }
 }
