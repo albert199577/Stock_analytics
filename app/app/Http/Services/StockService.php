@@ -3,15 +3,18 @@ namespace App\Http\Services;
 
 use App\Models\TwStockInfo;
 use GuzzleHttp\Client;
+use App\Http\Services\StockSearchService;
 
 class StockService
 {
      /** @var Client  */
     private $client;
     private $stockApiUrl;
+    private $stockSearch;
     public function __construct()
     {
         $this->client = new Client;
+        $this->stockSearch = new StockSearchService;
         $this->stockApiUrl = 'https://api.finmindtrade.com/api/v4/data?';
     }
 
@@ -139,5 +142,35 @@ class StockService
             $data[$key] = $value;
         }
         return $data;
+    }
+
+    public function analyticStock($info = null)
+    {
+        $Allstock = $this->getStockOverviewFromSQL(false, 0, 300);
+
+        $Alldata = [];
+        // catch all stock data
+        foreach ($Allstock as $key => $value) {
+            $data = $this->getFewStockDataFromCsv($value['stock_id']);
+            if (!empty($data)) $Alldata[$value['stock_id']] = $data;
+        }
+
+        $info = $info->input();
+        unset($info['_token']);
+
+        // condition judge
+        foreach ($info as $key => $value) {
+            if (!empty($value)) {
+                switch ($key) {
+                    case 'price_greater':
+                        $Alldata = $this->stockSearch->priceGreater($info['price_greater'], $Alldata);
+                        break;
+                }
+            }
+        }
+
+        $meetStock = array_keys($Alldata);
+
+        return $meetStock;
     }
 }
