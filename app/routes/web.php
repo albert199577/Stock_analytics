@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,4 +21,6 @@ Route::get('/', function () {
 
 Route::resource('stock', StockController::class);
 
+Route::resource('search', SearchController::class);
 
+Route::post('search/result', [SearchController::class, 'search'])->name('stock.search');
