@@ -39,7 +39,7 @@ class StockService
                 'date' => $value['date'],
                 'industry_category' => $value['industry_category'],
             ];
-            TwStockInfo::upsert($data, ['stock_name', 'stock_id', 'date', 'industry_category'], ['stock_id']);
+            TwStockInfo::upsert($data, ['stock_name', 'stock_id', 'date', 'industry_category'], ['stock_id', 'date']);
 
             // TwStockInfo::where('stock_id', $value['stock_id'])->firstOrFail()->update($data);
         }
