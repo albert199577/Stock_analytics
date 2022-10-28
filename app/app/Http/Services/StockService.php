@@ -76,7 +76,7 @@ class StockService
 
         if (empty($data)) return;
 
-        $path = public_path('/docs/stock/');
+        $path = storage_path('app/public/docs/stock/');
         $fileName = $stock_id . '.csv';
         
         $file = fopen($path . $fileName, 'w');
@@ -111,7 +111,7 @@ class StockService
     public function getFewStockDataFromCsv($stock_id)
     {
         $stock_id = strval($stock_id);
-        $path = public_path('/docs/stock/');
+        $path = storage_path('app/public/docs/stock/');
         $data = [];
         $row = [];
 

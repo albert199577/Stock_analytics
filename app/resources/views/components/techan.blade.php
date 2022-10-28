@@ -11,7 +11,8 @@
     }
 
     const stockId = getStockId();
-    const url = `http://127.0.0.1/api/stock/${stockId}`;
+//     const url = `http://127.0.0.1/api/stock/${stockId}`;
+    const url = `/storage/docs/stock/${stockId}.csv`;
 
     var dim = {
         width: 960, height: 500,
@@ -196,7 +197,7 @@
             .yAnnotation([rsiAnnotation, rsiAnnotationLeft])
             .verticalWireRange([0, dim.plot.height]);
 
-    var svg = d3.select("body").append("svg")
+    var svg = d3.select(".chart").append("svg")
             .attr("width", dim.width)
             .attr("height", dim.height);
 
@@ -315,12 +316,11 @@
     d3.select("button").on("click", reset);
     // const url = 'https://api.finmindtrade.com/api/v4/data?dataset=TaiwanStockPrice&data_id=2609&start_date=2022-01-01&end_date=2022-09-26';
 
-    d3.json(url, function(error, data) {
+    d3.csv(url, function(error, data) {
         var accessor = candlestick.accessor(),
             indicatorPreRoll = 33;  // Don't show where indicators don't have data
-        let jsonData = data.data;
-        console.log(data);
-        data = jsonData.map(function(d) {
+
+        data = data.map(function(d) {
             return {
                 date: new Date(d.date),
                 open: +d.open,
