@@ -91,7 +91,7 @@ class SearchController extends Controller
         //
     }
 
-    public function search(StockSearch $request)
+    public function search(Request $request)
     {
         $stocks = $this->stockservice->analyticStock($request);
         return view('stock.result', ['stocks' => $stocks]);
