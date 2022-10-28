@@ -146,7 +146,7 @@ class StockService
 
     public function analyticStock($info = null)
     {
-        $Allstock = $this->getStockOverviewFromSQL(false, 0, 300);
+        $Allstock = $this->getStockOverviewFromSQL(false, 0, 500);
 
         $Alldata = [];
         // catch all stock data
@@ -160,6 +160,16 @@ class StockService
 
         // condition judge
         foreach ($info as $key => $value) {
+            $exist = 1;
+            if (is_array($value)) {
+                foreach ($value as $k => $val) {
+                    if (empty($val)) {
+                        $exist = 0;
+                    }
+                }
+            }
+            if (!$exist) continue;
+
             if (!empty($value)) {
                 switch ($key) {
                     case 'price_greater':
@@ -169,8 +179,12 @@ class StockService
             }
         }
 
-        $meetStock = array_keys($Alldata);
+        $meetStocks = array_keys($Alldata);
 
-        return $meetStock;
+        $stockInfo = [];
+        foreach ($meetStocks as $key => $stock_id) {
+            $stockInfo[] = $this->getFewStocksInfo($stock_id);
+        }
+        return $stockInfo;
     }
 }
