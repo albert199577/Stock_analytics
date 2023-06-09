@@ -141,6 +141,10 @@ class StockService
             }
             $data[$key] = $value;
         }
+        // echo "<pre>";
+        // print_r($data);
+        // echo "</pre>";
+
         return $data;
     }
 
@@ -175,16 +179,49 @@ class StockService
                     case 'price_greater':
                         $Alldata = $this->stockSearch->priceGreater($info['price_greater'], $Alldata);
                         break;
+                    case 'gain':
+                        $Alldata = $this->stockSearch->gainByWeekend($info['gain']['weekend'], $info['gain']['precent'], $Alldata);
+                        break;
+                    case 'trading':
+                        $Alldata = $this->stockSearch->tradingVolume($info['trading']['day'], $info['trading']['volume'], $Alldata);
+                        break;
+                    case 'sideway':
+                        $Alldata = $this->stockSearch->sideway($info['sideway']['percent'], $info['sideway']['weekend'], $Alldata);
+                        break;
+                    case 'bull':
+                        $Alldata = $this->stockSearch->bull($info['bull']['s_ma'], $info['bull']['m_ma'], $info['bull']['l_ma'], $info['bull']['close_price'], $Alldata);
+                        break;
                 }
             }
         }
+        // 'close_day_price' => 'min:5|max:100', 收盤大於Ｘ日平均 ****
+        // 'weekend' => 'min:5|max:100', 近Ｘ週漲幅平均大於
+        // 'percent' => 'min:1|max:100', Ｘ％
+        // 'price' => 'min:1|max:100', 收盤價大於Ｘ元
+        // 'trading_day' => 'min:5|max:100', 交易量近Ｘ日
+        // 'trading_volume' => 'min:5', 大於Ｘ張
+        // 均線多排
+        // 's_ma' => 'min:1|max:200', 短均線Ｘ
+        // 'm_ma' => 'min:1|max:200', 中均線Ｘ
+        // 'l_ma' => 'min:1|max:200', 長均線Ｘ
+        // 'close_price' => 'max:1000', 收盤價Ｘ日ＭＡ向上
+
+        // echo "<pre>";
+        // print_r($Alldata);
+        // echo "</pre>";
 
         $meetStocks = array_keys($Alldata);
-
+        // echo "<pre>";
+        // print_r($meetStocks);
+        // echo "</pre>";
         $stockInfo = [];
         foreach ($meetStocks as $key => $stock_id) {
             $stockInfo[] = $this->getFewStocksInfo($stock_id);
         }
+        // echo "<pre>";
+        // print_r($stockInfo);
+        // echo "</pre>";
         return $stockInfo;
     }
+    // *       *       *       *       *       php /var/www/html/artisan schedule:run >> /dev/null 2>&1
 }

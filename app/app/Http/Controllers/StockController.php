@@ -24,7 +24,11 @@ class StockController extends Controller
     
     public function index()
     {
-        $this->stockservice->getStockOverview();
+        // $this->stockservice->getStockOverviewFromSQL(false, 0, 300);
+        
+        $this->stockservice->getFewStockDataFromCsv('0050');
+        // $this->stockservice->analyticStock();
+        // $this->stockservice->getStockOverview();
         return view('stock.index');
     }
 
@@ -59,6 +63,18 @@ class StockController extends Controller
     {
         $stockInfo = $this->stockservice->getFewStocksInfo($stock_id);
         return view('stock.show', ['stockInfo' => $stockInfo]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Stock  $stock
+     * @return \Illuminate\Http\Response
+     */
+    public function storeCsv($stock_id)
+    {
+        $stockInfo = $this->stockservice->saveFewStocksDataToCsv($stock_id);
+        return view('stock.index');
     }
 
     /**

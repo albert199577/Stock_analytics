@@ -5,7 +5,7 @@
 @section('content')
 <div class="container mx-auto">
 	<h3 class="text-center text-xl">搜尋結果</h3>
-
+	<p class="text-center text-l">共計{{ count($stocks)}} 筆符合搜尋條件</p>
 	<div class="flex flex-row justify-center">
 		<ul class="flex flex-col w-4/6">
 		@foreach ($stocks as $stock)

@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Log;
 
 class Kernel extends ConsoleKernel
 {
@@ -25,10 +26,13 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('stock:info')->dailyAt('15:00');
-        $schedule->command('stock:fewinfo 0 500')->dailyAt('15:30');
-        $schedule->command('stock:fewinfo 500 500')->dailyAt('17:50');
-        $schedule->command('stock:fewinfo 1000 500')->dailyAt('19:00');
+        // $schedule->command('stock:overview')->dailyAt('16:42');
+        // $schedule->command('stock:fewinfo 0 500')->dailyAt('16:49');
+        $schedule->command('stock:fewinfo 500 500')->dailyAt('18:35');
+        // $schedule->command('stock:fewinfo 1000 500')->dailyAt('18:45');
+        // $schedule->call(function () {
+        //     Log::info('設定排程成功');
+        // })->everyMinute();
     }
 
     /**

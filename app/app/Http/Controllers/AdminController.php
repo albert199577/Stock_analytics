@@ -2,23 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StockSearch;
-use App\Http\Services\StockService as ServicesStockService;
-use GuzzleHttp\Middleware;
-use Illuminate\Support\Facades\Gate;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-
-class SearchController extends Controller
+class AdminController extends Controller
 {
-    private $stockservice;
-    
-    public function __construct()
-    {
-        $this->middleware('can:search.index')->only(['index']);
-        $this->stockservice = new ServicesStockService;
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -26,7 +14,8 @@ class SearchController extends Controller
      */
     public function index()
     {
-        return view('stock.search');
+        // dd(User::all());
+        return view('admin.index', ['users' => User::all()]);
     }
 
     /**
@@ -93,11 +82,5 @@ class SearchController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function search(Request $request)
-    {
-        $stocks = $this->stockservice->analyticStock($request);
-        return view('stock.result', ['stocks' => $stocks]);
     }
 }

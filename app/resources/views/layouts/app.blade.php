@@ -14,7 +14,7 @@
         <div class="text-blue-700 text-lg font-mono">
             Stock
         </div>
-        <ul class="grid grid-cols-3 gap-4 text-green-700">
+        <ul class="flex flex-row gap-4 text-green-700">
             <li>
                 <a href="{{ route('stock.index') }}">
                     首頁
@@ -25,11 +25,33 @@
                     搜股
                 </a>
             </li>
-            <li>
-                <a href="">
-                    個股查詢
-                </a>
-            </li>
+            @guest
+                <li>
+                    <a href="{{ route('login') }}">
+                        登入
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('register') }}">
+                        註冊
+                    </a>
+                </li>
+            @else
+                <li>
+                    <a href="{{ route('logout')}}"
+                        onclick="event.preventDefault(); document.querySelector('#logout-form').submit();">
+                        登出 ({{ Auth::user()->name }})
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none">
+                        @csrf
+                    </form>
+                </li>
+                @if (Auth::user()->is_admin)
+                    <a href="{{ route('admin.index') }}">
+                        管理員後台
+                    </a>
+                @endif
+            @endguest
         </ul>
     </nav>
     @yield('content')
